@@ -1,0 +1,106 @@
+<div class="container mt-5">
+  <h2 class="text-center mb-4">Admin Product Management</h2>
+
+  <div class="card shadow-sm p-3 mb-4 border-info bg-light">
+    <h5 class="mb-3 text-info">Quick Add Category 🏷️</h5>
+    <div class="row g-2 align-items-center">
+      <div class="col-md-8">
+        <input type="text" [(ngModel)]="newCategoryName" class="form-control" placeholder="Enter Category Name (e.g. Laptops)">
+      </div>
+      <div class="col-md-4">
+        <button (click)="onAddCategory()" class="btn btn-info text-white w-100 shadow-sm">
+          Add Category
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm p-4 mb-5" [ngClass]="isEditMode ? 'border-warning bg-light' : 'bg-white'">
+    <h4 class="mb-3">{{ isEditMode ? 'Update Product ✏️' : 'Add New Product ➕' }}</h4>
+    <div class="row g-3">
+      <div class="col-md-4">
+        <label class="form-label">Product Name</label>
+        <input type="text" [(ngModel)]="newProduct.productName" class="form-control" placeholder="Enter name">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Category</label>
+        <select [(ngModel)]="selectedCategoryId" class="form-select" [disabled]="isEditMode">
+          <option value="0">Choose Category...</option>
+          <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.name }}</option>
+        </select>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Price</label>
+        <input type="number" [(ngModel)]="newProduct.price" class="form-control" placeholder="0.00">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Discount (%)</label>
+        <input type="number" [(ngModel)]="newProduct.discount" class="form-control" placeholder="0">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Quantity</label>
+        <input type="number" [(ngModel)]="newProduct.quantity" class="form-control" placeholder="Total stock">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Image URL</label>
+        <input type="text" [(ngModel)]="newProduct.image" class="form-control" placeholder="images/filename.jpg">
+      </div>
+      <div class="col-12 mt-3 text-center">
+        <button (click)="onSaveProduct()" class="btn px-5 shadow-sm" [ngClass]="isEditMode ? 'btn-warning' : 'btn-primary'">
+          {{ isEditMode ? 'Update Product' : 'Save Product' }}
+        </button>
+        <button *ngIf="isEditMode" (click)="resetForm()" class="btn btn-secondary ms-2">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm p-3 mb-4 bg-dark text-white border-0">
+    <div class="row g-3 align-items-center">
+      <div class="col-md-6">
+        <div class="input-group">
+          <span class="input-group-text bg-info border-info text-white">🔍</span>
+          <input type="text" class="form-control" placeholder="Search product by name..." 
+                 [(ngModel)]="searchTerm" (input)="applyFilters()">
+        </div>
+      </div>
+      <div class="col-md-6">
+        <select class="form-select border-info" [(ngModel)]="selectedFilterCategory" (change)="applyFilters()">
+          <option value="0">All Categories (Show All)</option>
+          <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.name }}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm p-3">
+    <h4 class="mb-3">Current Inventory (Total: {{filteredProducts.length}})</h4>
+    <table class="table table-hover align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>Name</th>
+          <th>Price</th>
+          <th>Stock</th>
+          <th class="text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of filteredProducts">
+          <td>{{p.productName}}</td>
+          <td>{{p.specialPrice | currency:'INR'}}</td>
+          <td>{{p.quantity}}</td>
+          <td class="text-center">
+            <button (click)="editProduct(p)" class="btn btn-sm btn-info me-2 shadow-sm text-white">
+              Edit ✏️
+            </button>
+            <button (click)="deleteProduct(p.productId)" class="btn btn-sm btn-danger shadow-sm">
+              Delete 🗑️
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredProducts.length === 0">
+            <td colspan="4" class="text-center text-muted py-4">No products found matching your search.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

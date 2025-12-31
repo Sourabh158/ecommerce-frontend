@@ -1,0 +1,28 @@
+.container {
+  max-width: 800px;
+}
+
+.success-icon {
+  animation: bounceIn 1.2s ease;
+}
+
+@keyframes bounceIn {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.05); opacity: 1; }
+  70% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+.card {
+  background: linear-gradient(145deg, #ffffff, #f0f0f0);
+}
+
+.btn-primary {
+  background-color: #0d6efd;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #0b5ed7;
+  transform: translateY(-2px);
+}

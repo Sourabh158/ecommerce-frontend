@@ -1,43 +1,28 @@
-# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
-
-# Compiled output
+# --- Existing Angular Rules ---
 /dist
 /tmp
 /out-tsc
-/bazel-out
-
-# Node
 /node_modules
-npm-debug.log
-yarn-error.log
+/.angular/cache
 
-# IDEs and editors
+# --- Backend (Spring Boot) Rules (Ye Add Karein) ---
+**/target/
+**/backend/target/
+*.class
+*.jar
+*.war
+*.ear
+*.log
+
+# --- IDEs and Tools ---
 .idea/
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
-
-# Visual Studio Code
 .vscode/*
 !.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-.history/*
+.settings/
+.classpath
+.project
+bin/
 
-# Miscellaneous
-/.angular/cache
-.sass-cache/
-/connect.lock
-/coverage
-/libpeerconnection.log
-testem.log
-/typings
-__screenshots__/
-
-# System files
+# --- System Files ---
 .DS_Store
 Thumbs.db

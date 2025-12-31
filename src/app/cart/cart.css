@@ -1,0 +1,24 @@
+.card {
+  border-radius: 12px;
+}
+
+.input-group {
+  max-width: 120px;
+}
+
+.btn-outline-secondary {
+  border-color: #dee2e6;
+}
+
+.img-fluid {
+  max-height: 80px;
+  object-fit: contain;
+}
+
+.text-primary {
+  color: #0d6efd !important;
+}
+
+.sticky-top {
+  z-index: 100;
+}

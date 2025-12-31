@@ -1,0 +1,40 @@
+<div class="container mt-5">
+  <h2 class="mb-4 fw-bold">My Order History 📦</h2>
+
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary"></div>
+  </div>
+
+  <div *ngIf="!loading && orders && orders.length === 0" class="text-center py-5 card shadow-sm">
+    <h4>No orders found!</h4>
+    <p>You haven't placed any orders yet.</p>
+    <button class="btn btn-primary" routerLink="/">Shop Now</button>
+  </div>
+
+  <div *ngIf="!loading && orders && orders.length > 0">
+    <div class="card shadow-sm mb-4" *ngFor="let order of orders">
+      <div class="card-header bg-light d-flex justify-content-between align-items-center">
+        <span><strong>Order ID:</strong> #{{ order.orderId }}</span>
+        <span class="badge bg-success">{{ order.orderStatus }}</span>
+      </div>
+      <div class="card-body">
+        <div class="row mb-3" *ngFor="let item of order.orderItems">
+          <div class="col-md-2">
+            <img [src]="item.product.image || 'assets/images/default.png'" class="img-fluid rounded" alt="product">
+          </div>
+          <div class="col-md-6">
+            <h5>{{ item.product.productName }}</h5>
+            <p class="text-muted mb-0">Qty: {{ item.quantity }}</p>
+          </div>
+          <div class="col-md-4 text-end">
+            <p class="fw-bold mb-0">₹{{ item.product.specialPrice * item.quantity }}</p>
+          </div>
+        </div>
+        <hr class="my-3">
+        <div class="text-end">
+          <h5 class="fw-bold text-primary">Total Paid: ₹{{ order.totalAmount }}</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
