@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class CartService {
 
-  private apiUrl = 'http://localhost:8080/api/cart';
+  private apiUrl = 'https://ecommerce-backend-x8kd.onrender.com/api/cart';
 
   constructor(private http: HttpClient) { }
 
@@ -45,13 +45,13 @@ export class CartService {
 
   // 5. Place Order (Razorpay के लिए)
   placeOrder(orderData: any): Observable<any> {
-    const url = 'http://localhost:8080/api/order/place'; 
+    const url = 'https://ecommerce-backend-x8kd.onrender.com/api/order/place'; 
     return this.http.post(url, orderData, { headers: this.getHeaders() });
   }
 
   // ✅ 6. Get User Orders (इसी में 'th' वाला एरर था, अब फिक्स है)
   getUserOrders(): Observable<any> {
-    const url = 'http://localhost:8080/api/order/user';
+    const url = 'https://ecommerce-backend-x8kd.onrender.com/api/order/user';
     return this.http.get(url, { headers: this.getHeaders() });
   }
 }

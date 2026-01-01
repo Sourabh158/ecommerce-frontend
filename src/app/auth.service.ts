@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class AuthService {
 
   // Apne Backend ka Port check kar lena (8080 ya jo bhi ho)
-  private apiUrl = 'http://localhost:8080/api/auth'; 
+  private apiUrl = 'https://ecommerce-backend-x8kd.onrender.com/api/auth'; 
 
   constructor(private http: HttpClient) {}
 
