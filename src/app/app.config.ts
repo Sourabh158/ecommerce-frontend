@@ -1,17 +1,20 @@
 import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { routes } from './app.routes'; // Agar file ka naam alag hai to check karein
-import { provideHttpClient } from '@angular/common/http';
+import { routes } from './app.routes'; 
+import { provideHttpClient, withInterceptors } from '@angular/common/http'; // ✅ withInterceptors जोड़ा गया
+import { authInterceptor } from './auth-interceptor'; // ✅ इंटरसेप्टर को इम्पोर्ट करें (पाथ चेक कर लें)
 
-// 👇 1. Library Import
 import { SocialAuthServiceConfig, GoogleLoginProvider } from '@abacritt/angularx-social-login';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient(),
+    
+    // ✅ HttpClient में इंटरसेप्टर रजिस्टर किया गया है
+    provideHttpClient(
+      withInterceptors([authInterceptor]) 
+    ),
 
-    // 👇 2. Google Auth Provider Setup
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {
@@ -20,7 +23,6 @@ export const appConfig: ApplicationConfig = {
           {
             id: GoogleLoginProvider.PROVIDER_ID,
             provider: new GoogleLoginProvider(
-              // 👇 YAHAN APNI CLIENT ID DALEIN (Galti mat karna)
               '725073792394-okigspuuloi04ls0t7embu4ta0ktdfpg.apps.googleusercontent.com'
             )
           }
