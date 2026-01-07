@@ -41,12 +41,20 @@
         <label class="form-label">Quantity</label>
         <input type="number" [(ngModel)]="newProduct.quantity" class="form-control" placeholder="Total stock">
       </div>
+
       <div class="col-md-4">
-        <label class="form-label">Image URL</label>
-        <input type="text" [(ngModel)]="newProduct.image" class="form-control" placeholder="images/filename.jpg">
+        <label class="form-label">Upload Product Image</label>
+        <input type="file" (change)="onFileSelected($event)" class="form-control">
+        <small class="text-info" *ngIf="isUploading">Uploading Image... Please wait.</small>
       </div>
+
+      <div class="col-12 mt-2" *ngIf="newProduct.image">
+        <p class="mb-1">Selected Image:</p>
+        <img [src]="newProduct.image" style="width: 100px; height: 100px; object-fit: cover; border-radius: 5px; border: 1px solid #ddd;">
+      </div>
+
       <div class="col-12 mt-3 text-center">
-        <button (click)="onSaveProduct()" class="btn px-5 shadow-sm" [ngClass]="isEditMode ? 'btn-warning' : 'btn-primary'">
+        <button (click)="onSaveProduct()" class="btn px-5 shadow-sm" [ngClass]="isEditMode ? 'btn-warning' : 'btn-primary'" [disabled]="isUploading">
           {{ isEditMode ? 'Update Product' : 'Save Product' }}
         </button>
         <button *ngIf="isEditMode" (click)="resetForm()" class="btn btn-secondary ms-2">Cancel</button>
@@ -60,7 +68,7 @@
         <div class="input-group">
           <span class="input-group-text bg-info border-info text-white">🔍</span>
           <input type="text" class="form-control" placeholder="Search product by name..." 
-                 [(ngModel)]="searchTerm" (input)="applyFilters()">
+                  [(ngModel)]="searchTerm" (input)="applyFilters()">
         </div>
       </div>
       <div class="col-md-6">

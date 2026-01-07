@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProductService } from '../product.service';
 import { CategoryService } from '../category.service';
+import { CloudinaryService } from '../services/cloudinary.service'; // ✅ नया इम्पोर्ट
 
 @Component({
   selector: 'app-admin-products',
@@ -12,13 +13,12 @@ import { CategoryService } from '../category.service';
   styleUrls: ['./admin-products.component.css']
 })
 export class AdminProductsComponent implements OnInit {
-  // --- Variables ---
   products: any[] = [];
-  filteredProducts: any[] = []; // ✅ सर्च और फिल्टर के बाद दिखने वाली लिस्ट
+  filteredProducts: any[] = [];
   categories: any[] = [];
   
-  searchTerm: string = ''; // ✅ सर्च इनपुट के लिए
-  selectedFilterCategory: number = 0; // ✅ फिल्टर ड्रॉपडाउन के लिए
+  searchTerm: string = '';
+  selectedFilterCategory: number = 0;
 
   newCategoryName: string = '';
   newProduct = { 
@@ -34,10 +34,12 @@ export class AdminProductsComponent implements OnInit {
   selectedCategoryId: number = 0;
   isEditMode: boolean = false;
   editingProductId: number | null = null;
+  isUploading: boolean = false; // ✅ अपलोडिंग इंडिकेटर के लिए
 
   constructor(
     private productService: ProductService,
     private categoryService: CategoryService,
+    private cloudinaryService: CloudinaryService, // ✅ सर्विस यहाँ जोड़ दी है
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -46,37 +48,50 @@ export class AdminProductsComponent implements OnInit {
     this.loadCategories();
   }
 
-  // --- Methods ---
+  // ✅ इमेज को Cloudinary पर अपलोड करने का फंक्शन
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.isUploading = true;
+      this.cloudinaryService.uploadImage(file).subscribe({
+        next: (res) => {
+          this.newProduct.image = res.secure_url; // Cloudinary से मिला लिंक सेव करें
+          this.isUploading = false;
+          alert("Image Uploaded Successfully! ✅");
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          console.error('Upload Error:', err);
+          this.isUploading = false;
+          alert("Image Upload Failed! ❌");
+        }
+      });
+    }
+  }
 
   loadProducts() {
     this.productService.getAllProducts().subscribe({
       next: (data: any) => {
         this.products = data;
-        this.applyFilters(); // ✅ डेटा लोड होते ही फिल्टर चलाएं
+        this.applyFilters();
         this.cdr.detectChanges();
       },
       error: (err: any) => console.error("Load Error:", err)
     });
   }
 
-  // 🔥 मुख्य फिल्टर लॉजिक: सर्च और कैटेगरी दोनों को एक साथ चेक करता है
   applyFilters() {
     let temp = [...this.products];
-
-    // 1. नाम के आधार पर सर्च करें
     if (this.searchTerm.trim()) {
       const term = this.searchTerm.toLowerCase();
       temp = temp.filter(p => p.productName.toLowerCase().includes(term));
     }
-
-    // 2. कैटेगरी के आधार पर फिल्टर करें
     if (this.selectedFilterCategory != 0) {
       temp = temp.filter(p => 
         p.category && (p.category.id == this.selectedFilterCategory || p.category.categoryId == this.selectedFilterCategory)
       );
     }
-
-    this.filteredProducts = temp; // UI को अपडेट करने के लिए
+    this.filteredProducts = temp;
   }
 
   loadCategories() {
@@ -101,7 +116,6 @@ export class AdminProductsComponent implements OnInit {
         this.loadCategories();
       },
       error: (err: any) => {
-        // Plain text response handle करने के लिए
         if (err.status === 201 || err.status === 200) {
           alert("Category Added Successfully! ✅");
           this.newCategoryName = '';
