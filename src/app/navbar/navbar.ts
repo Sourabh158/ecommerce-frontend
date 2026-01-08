@@ -1,4 +1,4 @@
-import { Component, OnInit, DoCheck } from '@angular/core'; // 👈 1. DoCheck जोड़ा
+import { Component, OnInit, DoCheck } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 
@@ -9,7 +9,7 @@ import { RouterModule, Router } from '@angular/router';
   templateUrl: './navbar.html',
   styleUrl: './navbar.css'
 })
-export class NavbarComponent implements OnInit, DoCheck { // 👈 2. DoCheck यहाँ भी जोड़ा
+export class NavbarComponent implements OnInit, DoCheck {
 
   isLoggedIn: boolean = false;
   isAdmin: boolean = false;
@@ -21,7 +21,6 @@ export class NavbarComponent implements OnInit, DoCheck { // 👈 2. DoCheck य
     this.checkLoginStatus();
   }
 
-  // 👈 3. यह नया फंक्शन हर बदलाव पर डेटा चेक करेगा (जैसे ही आप लॉगिन करेंगे)
   ngDoCheck(): void {
     this.checkLoginStatus();
   }
@@ -33,8 +32,6 @@ export class NavbarComponent implements OnInit, DoCheck { // 👈 2. DoCheck य
 
     if (token) {
       this.isLoggedIn = true;
-      
-      // 👈 4. पक्का करें कि roles मौजूद है और उसमें ROLE_ADMIN लिखा है
       if (roles && roles.includes('ROLE_ADMIN')) {
         this.isAdmin = true;
       } else {
