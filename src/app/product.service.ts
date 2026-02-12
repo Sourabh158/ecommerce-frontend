@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ProductService {
-  private baseUrl = 'https://ecommerce-backend-x8kd.onrender.com/api'; 
+  private baseUrl = 'https://above-mireille-sourabhmahajan158-e6ff2785.koyeb.app'; 
 
   constructor(private http: HttpClient) { }
 
